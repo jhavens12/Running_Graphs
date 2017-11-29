@@ -7,6 +7,7 @@ import get_time
 import collections
 import json
 import calendar
+import credentials
 
 def my_filtered_activities(): #combines my_activities and filter functions
     url = 'https://www.strava.com/api/v3/athlete/activities'
