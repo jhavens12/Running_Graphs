@@ -500,7 +500,8 @@ def full_running_totals(dictionary1,days,unit):
     now = datetime.datetime.now()
     start_of_today = datetime.datetime(now.year, now.month, now.day, hour=0, minute=0, second=0)
     end_of_today = datetime.datetime(now.year, now.month, now.day, hour=23, minute=59, second=59)
-    difference = start_of_today - get_time.FOY()
+
+    difference = start_of_today - get_time.forever() #fix start peroid
 
     calculation_range = list(range(0,(difference.days +1))) #creates list from past date(given) to current date
     calculation_range_rev = list(reversed(calculation_range))
