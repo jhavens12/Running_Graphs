@@ -4,6 +4,7 @@ import time
 import datetime
 from datetime import date
 import get_time
+from pprint import pprint
 
 def filter_by_username(dataset,user):
     #filters out strava by username, type and 0.0 distance removed
@@ -447,6 +448,7 @@ def var_calc_loop_double(time_function1,time_function2,sub_dataset):
     #return name_miles,name_count,name_pace,name_solo_miles,name_solo_count,name_solo_pace,name_partner_miles,name_partner_count,name_partner_pace
 
 ###
+#NEWEST FUNCTIONS HERE
 def all_running_totals(dictionary1,days):
     #used by Noteables2 to get dictionary of running totals and datetime for keys
     calculation_range_time = []
@@ -492,6 +494,7 @@ def full_running_totals(dictionary1,days,unit):
     #creadted for use with master_dict
     #newest and working
     #limit days after this calculation for range
+    #Creates running totals for each day - not just activity day
     calculation_range_time = []
     final_list = []
     dictionary = dictionary1.copy()
@@ -527,6 +530,38 @@ def full_running_totals(dictionary1,days,unit):
         new_date_list.append(new_day)
     new_dict = dict(zip(new_date_list, final_list))
     return new_dict
+
+def monthly_daily_totals(dictionary,time_input,unit_input):
+    #for use with masterdict (get_data.my_filtered_activities())
+    #01.29.18
+    x_list = []
+    y_list = []
+
+    #filters out only dates needed
+    for key in list(dictionary):
+        if key < get_time.FOM(time_input): #if older than first of month
+            del dictionary[key]
+    for key in list(dictionary):
+       if key > get_time.LOM(time_input): #if newer than first of month
+           del dictionary[key]
+
+    calculation_day_count = (get_time.LOM(time_input) - get_time.FOM(time_input)).days #how many days in the month
+    print(calculation_day_count)
+    calculation_day_range = list(range(1,calculation_day_count+2)) #range of 1 to the days in the month - calculation days
+    print(calculation_day_range)
+
+    mile_count = 0
+    mile_count_list = []
+    day_count_list = []
+    for day in calculation_day_range:  #ex 1-31
+        for activity in dictionary:
+            if activity.day == day: #if the day of the activity matches the day in the list
+                mile_count = mile_count + float(dictionary[activity][unit_input])
+                mile_count_list.append(mile_count) #add mile count
+                day_count_list.append(activity.day) #add day that count occurs
+
+    return day_count_list,mile_count_list
+
 
 ####
 
