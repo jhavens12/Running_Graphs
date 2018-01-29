@@ -5,33 +5,30 @@ import matplotlib.pyplot as plt
 import pylab
 import matplotlib.dates as mdates
 from pprint import pprint
+#calculates the total per month, given the option to graph multiple months
 
 master_dict = get_data.my_filtered_activities()
 
-def graph(master_dict,input3,input4):
+def graph_per_month_total(master_dict,choice_dict):
     #elapsed_time, distance_miles, average_speed, kudos_count, max_heartrate, average_heartrate, max_speed, pace_dec, total_elevation_gain,
     #athlete_count, average_temp, achivement_count
     input2 = 'distance_miles'
 
-    x_list,y_list = calc.monthly_daily_totals(master_dict.copy(),input3,input2)
-    x2_list,y2_list = calc.monthly_daily_totals(master_dict.copy(),input4,input2)
+    graph_dict = {}
+    for choice in choice_dict:
+        graph_dict[choice] = calc.monthly_daily_totals(master_dict.copy(),choice_dict[choice],input2)
 
-    for x,y in zip(x_list,y_list):
-        print(str(x)+" "+str(y))
-
-    for x,y in zip(x2_list,y2_list):
-        print(str(x)+" "+str(y))
+    for date_range,choice in zip(graph_dict,choice_dict):
+        plt.plot(list(graph_dict[date_range].keys()),list(graph_dict[date_range].values()),label=(get_time.what_month(get_time.FOM(choice_dict[choice]).month)+" "+str(get_time.FOM(choice_dict[choice]).year)))
 
     plt.style.use('dark_background')
     plt.rcParams['lines.linewidth'] = 1
-    plt.plot(x_list,y_list, color='red')
-    plt.plot(x2_list,y2_list, color='blue')
     plt.ylim(ymin=0)
     plt.title('Monthly Totals - '+' Unit: ' + input2)
-    plt.legend([get_time.what_month(get_time.FOM(input3).month)+" "+str(get_time.FOM(input3).year), get_time.what_month(get_time.FOM(input4).month)+" "+str(get_time.FOM(input4).year)], loc='best')
+    plt.legend()
     plt.show()
 
-list1 = list(range(0,15))
+list1 = list(range(0,15)) #past 15 months
 list2 = []
 for x in list1:
     list2.append(str(get_time.what_month(get_time.FOM(x).month)) +" "+str(get_time.FOM(x).year))
@@ -39,7 +36,11 @@ for x in list1:
 for x,y in zip(list1,list2):
     print(str(x)+" - "+str(y))
 
-input3 = int(input("What is the first month number? "))
-input4 = int(input("What is the second month number? "))
+q1 = int(input("How many months would you like to graph? "))
 
-graph(master_dict,input3,input4)
+choice_dict = {}
+for q in list(range(1,q1+1)):
+    choice_dict[q] = int(input("What is the number "+str(q)+" month number? "))
+
+pprint(choice_dict)
+graph_per_month_total(master_dict,choice_dict)

@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import pylab
 import matplotlib.dates as mdates
 from pprint import pprint
+#graphs running total for 2 months
 
 master_dict = get_data.my_filtered_activities()
 

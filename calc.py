@@ -534,6 +534,7 @@ def full_running_totals(dictionary1,days,unit):
 def monthly_daily_totals(dictionary,time_input,unit_input):
     #for use with masterdict (get_data.my_filtered_activities())
     #01.29.18
+    #takes in number for how many months ago. Ex 0 is current, 1 is last month
     x_list = []
     y_list = []
 
@@ -546,13 +547,11 @@ def monthly_daily_totals(dictionary,time_input,unit_input):
            del dictionary[key]
 
     calculation_day_count = (get_time.LOM(time_input) - get_time.FOM(time_input)).days #how many days in the month
-    print(calculation_day_count)
     calculation_day_range = list(range(1,calculation_day_count+2)) #range of 1 to the days in the month - calculation days
-    print(calculation_day_range)
 
     mile_count = 0
-    mile_count_list = []
-    day_count_list = []
+    mile_count_list = [] #list of miles
+    day_count_list = [] #list of days miles occurred
     for day in calculation_day_range:  #ex 1-31
         for activity in dictionary:
             if activity.day == day: #if the day of the activity matches the day in the list
@@ -560,7 +559,7 @@ def monthly_daily_totals(dictionary,time_input,unit_input):
                 mile_count_list.append(mile_count) #add mile count
                 day_count_list.append(activity.day) #add day that count occurs
 
-    return day_count_list,mile_count_list
+    return dict(zip(day_count_list,mile_count_list))
 
 
 ####
