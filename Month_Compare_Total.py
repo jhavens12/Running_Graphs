@@ -8,9 +8,7 @@ from pprint import pprint
 
 master_dict = get_data.my_filtered_activities() #grabs dictionary of strava information
 
-def graph_per_month_total(master_dict,choice_dict):
-    #elapsed_time, distance_miles, average_speed, kudos_count, max_heartrate, average_heartrate, max_speed, pace_dec, total_elevation_gain,
-    #athlete_count, average_temp, achivement_count
+def graph_per_month_total(master_dict,choice_dict,unit_dict):
     input2 = 'distance_miles'
 
     graph_dict = {}
@@ -27,9 +25,7 @@ def graph_per_month_total(master_dict,choice_dict):
     plt.legend()
     plt.show()
 
-def graph_per_month_running(master_dict,choice_dict):
-    #elapsed_time, distance_miles, average_speed, kudos_count, max_heartrate, average_heartrate, max_speed, pace_dec, total_elevation_gain,
-    #athlete_count, average_temp, achivement_count
+def graph_per_month_running(master_dict,choice_dict,unit_dict):
     input1 = 7
     input2 = 'distance_miles'
 
@@ -56,6 +52,9 @@ def graph_per_month_running(master_dict,choice_dict):
     plt.legend()
     plt.show()
 
+unit_dict = {1:'distance_miles', 2:'elapsed_time', 3:'average_speed', 4:'kudos_count', 5:'max_heartrate', 6:'average_heartrate', 7:'max_speed', 8:'pace_dec', 9:'total_elevation_gain', \
+    10:'athlete_count', 11:'average_temp', 12:'achivement_count'}
+
 list1 = list(range(0,15)) #past 15 months
 list2 = []
 for x in list1:
@@ -64,13 +63,26 @@ for x in list1:
 for x,y in zip(list1,list2):
     print(str(x)+" - "+str(y)) #prints out nice list
 
-q1 = int(input("How many months would you like to graph? "))
 q2 = int(input("Running Graph or Total? \n 1 - Total \n 2 - Running \n"))
+q1 = int(input("How many months would you like to graph? "))
 
+#for option in unit_dict:
+    #print(str(option)+" - "+unit_dict[option])
 choice_dict = {}
-for q in list(range(1,q1+1)):
-    choice_dict[q] = int(input("What is the number "+str(q)+" month number? "))
-if q2 == 1: #total choice
-    graph_per_month_total(master_dict,choice_dict)
-if q2 == 2: #running choice
-    graph_per_month_running(master_dict,choice_dict)
+full_choice_dict = {1:0,2:1,3:2,4:3,5:4,6:5,7:6,8:7,9:8,10:9,11:10,12:11,13:12,14:13,15:14}
+chosen_unit_dict = {}
+
+if q1 == 15:
+    if q2 == 1: #total choice
+        graph_per_month_total(master_dict,full_choice_dict,chosen_unit_dict)
+    if q2 == 2: #running choice
+        graph_per_month_running(master_dict,full_choice_dict,chosen_unit_dict)
+else:
+    for q in list(range(1,q1+1)):
+        choice_dict[q] = int(input("What is the number "+str(q)+" month number? "))
+        #chosen_unit_dict[q] = unit_dict[int(input("What unit should be graphed? "))]
+
+    if q2 == 1: #total choice
+        graph_per_month_total(master_dict,choice_dict,chosen_unit_dict)
+    if q2 == 2: #running choice
+        graph_per_month_running(master_dict,choice_dict,chosen_unit_dict)
