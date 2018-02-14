@@ -36,8 +36,9 @@ def LM(x): #updated
     #last monday
     #start of day
     now = datetime.datetime.now()
-    past = now - relativedelta(weeks=x)
-    return past - datetime.timedelta(days=now.weekday())
+    now2 = datetime.datetime(now.year, now.month, now.day, hour=00, minute=00, second=00)
+    past = now2 - relativedelta(weeks=x)
+    return past - datetime.timedelta(days=now2.weekday())
 
 def LS(x): #works
     #last sunday
