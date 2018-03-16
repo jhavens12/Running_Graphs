@@ -49,6 +49,10 @@ def clean_event(i):
     i['total_elevation_feet'] = convert_elevation(i['total_elevation_gain'])
     i['start_date_datetime'] = event_timestamp(i)
     i['weekday_date'] = convert_weekday(i['start_date_datetime'])
+    if "Treadmill" not in i['name']:
+        i['treadmill_flagged'] = "no"
+    if "Treadmill" in i['name']:
+        i['treadmill_flagged'] = "yes"
 
     return i
 
