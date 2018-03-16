@@ -25,8 +25,8 @@ def graph_per_month_total(master_dict,choice_dict,unit_dict):
     plt.legend()
     plt.show()
 
-def graph_per_month_running(master_dict,choice_dict,unit_dict):
-    input1 = 7
+def graph_per_month_running(master_dict,choice_dict,unit_dict,days_total):
+    input1 = days_total
     input2 = 'distance_miles'
 
     graph_dict = {}
@@ -85,4 +85,5 @@ else:
     if q2 == 1: #total choice
         graph_per_month_total(master_dict,choice_dict,chosen_unit_dict)
     if q2 == 2: #running choice
-        graph_per_month_running(master_dict,choice_dict,chosen_unit_dict)
+        q3 = int(input("How many running total days? "))
+        graph_per_month_running(master_dict,choice_dict,chosen_unit_dict,q3)

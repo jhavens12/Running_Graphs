@@ -9,7 +9,7 @@ from pprint import pprint
 
 master_dict = get_data.my_filtered_activities() #grabs dictionary of strava information
 
-input1 = 7 #days to total
+input1 = 90 #days to total
 input2 = 'distance_miles'
 input3 = 12 #months back to graph
 
