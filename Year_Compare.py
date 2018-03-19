@@ -22,8 +22,8 @@ def graph(formula, x_range,title):
     x = np.array(x_range)
     y = eval(formula)
     plt.plot(x, y, label=(title))
-    for s,l in zip(x,y):
-        print(s,l)
+    # for s,l in zip(x,y):
+    #     print(s,l)
 
 graph('x*(600/365)', range(0,366),"600 Miles")
 graph('x*(365/365)', range(0,366),"365 Miles")

@@ -7,14 +7,34 @@ import matplotlib.dates as mdates
 from pprint import pprint
 import numpy as np
 import datetime
+import pandas as pd
+from random import randint
+from sklearn.linear_model import LinearRegression
+from time import mktime
 
 master_dict = get_data.my_filtered_activities()
 
 #Setup
 
-diff = datetime.datetime.now() - datetime.datetime(2017, 1, 1)
-weeks_back = int(diff.days/7)
+def trend_line(x_list,y_list):
+    df = pd.DataFrame()
+    df['dates'] = x_list
+    df['miles'] = y_list
+    df['seconds'] = df.dates.apply(lambda x: mktime(x.timetuple()))
+    model = LinearRegression().fit(df.seconds.values.reshape(-1,1), df.miles)
+    df['y_trend'] = model.predict(df.seconds.values.reshape(-1,1))
 
+    return df
+print("1 - 2017")
+print("2 - 2018")
+q1 = int(input("How far back to graph? "))
+
+if q1 == 1:
+    diff = datetime.datetime.now() - datetime.datetime(2017, 1, 1)
+if q1 == 2:
+    diff = datetime.datetime.now() - datetime.datetime(2018, 1, 1)
+
+weeks_back = int(diff.days/7)
 weeks_to_calculate = list(range(1,weeks_back)) #calculate 0 to 17
 
 week_dict = {}
@@ -110,16 +130,22 @@ for month in count_dict:
 
 
 ########
-fig, (ax1,ax2,ax4) = plt.subplots(nrows=3, figsize=(13,9)) #figsize sets window
+fig, (ax1,ax2,ax4) = plt.subplots(nrows=3, figsize=(13,8)) #figsize sets window
 
+ax1df = trend_line(x_list,y_list)
 #plots top plot with shared x but different scale Y
 #ax1.set_title("Weekly Mileage")
 ax1.bar(x_list,y_list,align='center',width=6)
+ax1slope = str(float(ax1df['y_trend'].iloc[0]) - float(ax1df['y_trend'].iloc[-1]))
+ax1.plot_date(ax1df.dates, ax1df.y_trend, 'red', ls='solid', marker='None',label=ax1slope)
+
+
 #ax1.set_xlabel('Week Start', color='b')
 # Make the y-axis label, ticks and tick labels match the line color.
 ax1.set_ylabel('Miles Ran', color='b')
 ax1.tick_params('y', colors='b')
 ax1.grid(True)
+ax1.legend()
 
 #ax2.set_title("Weekly Pace - Averages of Averages")
 ax2.plot(x2_list,y2_list,'r',label='Pace')
@@ -136,6 +162,7 @@ ax3.tick_params('y', colors='g')
 ax4.bar(x6_list,y6_list,align='center',width=6,color='b') #total runs
 ax4.bar(x5_list,y5_list,align='center',width=6,color='r') #treadmill runs
 ax4.set_ylabel('Runs Per Week', color='b')
+ax4.set_yticks(range(max(y6_list)+1))
 ax4.tick_params('y', colors='b')
 ax4.grid(True)
 
@@ -147,3 +174,5 @@ ax4.grid(True)
 fig.tight_layout()
 fig.subplots_adjust(hspace=0.3)
 plt.show()
+
+print("Need to fix so dates are consistent, possibly show every date instead of letting it choose")
