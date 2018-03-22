@@ -80,6 +80,7 @@ def monthly_daily_totals(dictionary,time_input,unit_input):
 def yearly_totals(dictionary,years_ago):
     #0 = this year
     #1 = last year
+    #returns days of year as keys (1-365)
     now = datetime.datetime.now()
     start_of_year = datetime.datetime((now.year - years_ago), 1, 1)
     end_of_year = datetime.datetime((now.year - years_ago), 12, 31)
@@ -106,6 +107,37 @@ def yearly_totals(dictionary,years_ago):
 
     return dict(zip(day_count_list,mile_count_list))
 
+def yearly_totals_dates(dictionary,years_ago):
+    #0 = this year
+    #1 = last year
+    #returns event dates as keys (datetime objects)
+    #used only for creating trendline
+    now = datetime.datetime.now()
+    start_of_year = datetime.datetime((now.year - years_ago), 1, 1)
+    end_of_year = datetime.datetime((now.year - years_ago), 12, 31)
+
+    for key in list(dictionary):
+        if key < start_of_year: #if older than first of month
+            del dictionary[key]
+    for key in list(dictionary):
+       if key > end_of_year: #if newer than first of month
+           del dictionary[key]
+
+    calculation_day_count = (end_of_year - start_of_year).days #how many days in the month
+    calculation_day_range = list(range(1,calculation_day_count+2)) #range of 1 to the days in the month - calculation days
+
+    mile_count = 0
+    mile_count_list = [] #list of miles
+    day_count_list = [] #list of days miles occurred
+    for day in calculation_day_range:  #ex 1-31
+        for activity in dictionary:
+            if activity.timetuple().tm_yday == day: #if the day of the activity matches the day in the list
+                mile_count = mile_count + float(dictionary[activity]['distance_miles'])
+                mile_count_list.append(mile_count) #add mile count
+                #print(activity)
+                day_count_list.append(activity) #add datetime object as key
+
+    return dict(zip(day_count_list,mile_count_list))
 ###########
 #OLD
 ###########

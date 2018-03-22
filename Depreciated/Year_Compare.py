@@ -28,7 +28,6 @@ def graph(formula, x_range,title):
 graph('x*(600/365)', range(0,366),"600 Miles")
 graph('x*(365/365)', range(0,366),"365 Miles")
 
-
 plt.style.use('dark_background')
 plt.rcParams['lines.linewidth'] = 1
 plt.ylim(ymin=0)

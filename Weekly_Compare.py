@@ -13,8 +13,10 @@ from sklearn.linear_model import LinearRegression
 from time import mktime
 
 master_dict = get_data.my_filtered_activities()
-
 #Setup
+
+def format_number(number):
+    return str("{0:.2f}".format(number))
 
 def trend_line(x_list,y_list):
     df = pd.DataFrame()
@@ -54,7 +56,7 @@ for week in week_dict:
 miles_dict = {}
 pace_dict = {}
 hr_dict = {}
-cad_dict = {}
+ele_dict = {}
 tred_dict = {}
 count_dict = {}
 
@@ -63,7 +65,7 @@ for week in week_dict:
         mile_list = []
         pace_list = []
         hr_list = []
-        cad_list = []
+        ele_list = []
         tred_list = []
         count_list = []
         for activity in week_dict[week]:
@@ -71,11 +73,12 @@ for week in week_dict:
             mile_list.append(float(week_dict[week][activity]['distance_miles']))
             pace_list.append(float(week_dict[week][activity]['pace_dec']))
             hr_list.append(float(week_dict[week][activity]['average_heartrate']))
-            if 'average_cadence' in week_dict[week][activity]:
-                cad_list.append(float(week_dict[week][activity]['average_cadence']))
-                cad_dict[get_time.LM(week)] = sum(cad_list)/len(cad_list)
+            #print(week_dict[week][activity]['average_heartrate'])
+            if 'total_elevation_feet' in week_dict[week][activity]:
+                ele_list.append(float(week_dict[week][activity]['total_elevation_feet']))
+                ele_dict[get_time.LM(week)] = sum(ele_list)#/len(ele_list)
             else:
-                cad_dict[get_time.LM(week)] = 0
+                ele_dict[get_time.LM(week)] = 0
             if 'treadmill_flagged' in week_dict[week][activity]:
                 if week_dict[week][activity]['treadmill_flagged'] == 'yes':
                     tred_list.append(1)
@@ -112,9 +115,9 @@ for month in hr_dict:
 
 x4_list = []
 y4_list = []
-for month in cad_dict:
+for month in ele_dict:
     x4_list.append(month)
-    y4_list.append(cad_dict[month])
+    y4_list.append(ele_dict[month])
 
 x5_list = []
 y5_list = []
@@ -130,49 +133,42 @@ for month in count_dict:
 
 
 ########
-fig, (ax1,ax2,ax4) = plt.subplots(nrows=3, figsize=(13,8)) #figsize sets window
-
-ax1df = trend_line(x_list,y_list)
-#plots top plot with shared x but different scale Y
-#ax1.set_title("Weekly Mileage")
-ax1.bar(x_list,y_list,align='center',width=6)
-ax1slope = str(float(ax1df['y_trend'].iloc[0]) - float(ax1df['y_trend'].iloc[-1]))
-ax1.plot_date(ax1df.dates, ax1df.y_trend, 'red', ls='solid', marker='None',label=ax1slope)
+fig, (ax1,ax2,ax4,ax5) = plt.subplots(nrows=4, figsize=(13,8)) #figsize sets window
 
 
-#ax1.set_xlabel('Week Start', color='b')
-# Make the y-axis label, ticks and tick labels match the line color.
+ax1df = trend_line(x_list, y_list)
+ax1.bar(x_list, y_list, align='center', width=6)
+ax1slope = format_number(float(ax1df['y_trend'].iloc[0]) - float(ax1df['y_trend'].iloc[-1]))
+ax1.plot_date(ax1df.dates, ax1df.y_trend, 'red', ls='--', marker='None',label=ax1slope)
 ax1.set_ylabel('Miles Ran', color='b')
+ax1.set_yticks(range(int(max(y_list))+1),3)
 ax1.tick_params('y', colors='b')
-ax1.grid(True)
+ax1.yaxis.grid(True)
 ax1.legend()
 
-#ax2.set_title("Weekly Pace - Averages of Averages")
-ax2.plot(x2_list,y2_list,'r',label='Pace')
-#ax2.set_xlabel('Week Start', color='r')
-ax2.set_ylabel('Pace (Decimal)', color='r')
-ax2.tick_params('y', colors='r')
-ax2.grid(True)
-
+ax2.plot(x2_list,y2_list, color='g', label='Pace', linewidth=2)
+ax2.set_ylabel('Pace (Decimal)', color='g')
+ax2.tick_params('y', colors='g')
+ax2.yaxis.grid(True)
 ax3 = ax2.twinx()
-ax3.plot(x3_list,y3_list,'g',label='Avg HR')
-ax3.set_ylabel('Avg of Avg HR', color='g')
-ax3.tick_params('y', colors='g')
+ax3.plot(x3_list,y3_list, color='r', label='Avg HR')
+ax3.set_ylabel('Avg of Avg HR', color='r')
+ax3.tick_params('y', colors='r')
 
-ax4.bar(x6_list,y6_list,align='center',width=6,color='b') #total runs
-ax4.bar(x5_list,y5_list,align='center',width=6,color='r') #treadmill runs
+ax4.bar(x6_list,y6_list, align='center', width=6, color='b', label='Outdoor') #total runs
+ax4.bar(x5_list,y5_list, align='center', width=6, color='#fc5e02', label='Treadmill') #treadmill runs
 ax4.set_ylabel('Runs Per Week', color='b')
 ax4.set_yticks(range(max(y6_list)+1))
 ax4.tick_params('y', colors='b')
-ax4.grid(True)
+ax4.yaxis.grid(True)
+ax4.legend()
 
-#ax5 = ax4.twinx()
-#ax5.bar(x6_list,y6_list,color='r')
-#ax5.set_ylabel('Runs', color='r')
-#ax5.tick_params('y', colors='r')
+ax5.plot(x4_list,y4_list, label='Total')
+ax5.set_ylabel('Total Elevation (Feet)')
+ax5.set_yticks(range(int(max(y4_list)+1)),20)
+ax5.yaxis.grid(True)
+ax4.legend()
 
 fig.tight_layout()
 fig.subplots_adjust(hspace=0.3)
 plt.show()
-
-print("Need to fix so dates are consistent, possibly show every date instead of letting it choose")
