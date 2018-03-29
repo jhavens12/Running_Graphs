@@ -8,6 +8,8 @@ import numpy as np
 from pprint import pprint
 
 master_dict = get_data.my_filtered_activities() #grabs dictionary of strava information
+# for x in master_dict:
+#     print(master_dict[x]['map']['summary_polyline'])
 
 input1 = 365 #Blue
 input2 = 90 #Red

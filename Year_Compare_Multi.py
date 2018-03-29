@@ -14,6 +14,21 @@ from time import mktime
 import datetime
 
 master_dict = get_data.my_filtered_activities() #grabs dictionary of strava information
+single_dict = {}
+
+for event in master_dict:
+    if master_dict[event]['athlete_count'] == 1:
+        if master_dict[event]['treadmill_flagged'] == 'no':
+            single_dict[event] = master_dict[event]
+
+single_yearly_dict = calc.yearly_totals(single_dict.copy(),0) #this year
+single_yearly_dict_2 = calc.yearly_totals(single_dict.copy(),1) #last year
+
+print("This year:")
+print(len(single_yearly_dict))
+
+print("last year:")
+print(len(single_yearly_dict_2))
 
 yearly_dict = calc.yearly_totals(master_dict.copy(),0) #current year
 yearly_dict2 = calc.yearly_totals(master_dict.copy(),1) #last year
@@ -44,6 +59,7 @@ y2_list = []
 
 todays_number = datetime.datetime.now().timetuple().tm_yday #finds number of year
 month_ago_number = todays_number - 30 #number to filter entires out from since not datetime objects
+
 
 for event in yearly_dict:
     x_list.append(event)
