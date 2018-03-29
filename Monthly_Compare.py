@@ -1,3 +1,6 @@
+#based off of mweekly_compare
+#need to fix x labels on graph somehow
+
 import get_time
 import get_data
 import calc
@@ -27,29 +30,31 @@ def trend_line(x_list,y_list):
     df['y_trend'] = model.predict(df.seconds.values.reshape(-1,1))
 
     return df
-print("1 - 2017")
-print("2 - 2018")
-q1 = int(input("How far back to graph? "))
 
-if q1 == 1:
-    diff = datetime.datetime.now() - datetime.datetime(2017, 1, 1)
-if q1 == 2:
-    diff = datetime.datetime.now() - datetime.datetime(2018, 1, 1)
+# print("1 - 2017")
+# print("2 - 2018")
+# q1 = int(input("How far back to graph? "))
 
-weeks_back = int(diff.days/7)
-weeks_to_calculate = list(range(0,weeks_back)) #calculate 0 to 17
+# if q1 == 1:
+#     diff = datetime.datetime.now() - datetime.datetime(2017, 1, 1)
+# if q1 == 2:
+#     diff = datetime.datetime.now() - datetime.datetime(2018, 1, 1)
+
+# weeks_back = int(diff.days/7)
+weeks_to_calculate = list(range(0,14))
 
 week_dict = {}
+
 for week in weeks_to_calculate:
     week_dict[week] = master_dict.copy() #make a master dict for each week to calculate
 
 for week in week_dict:
 
     for key in list(week_dict[week]): #for each key in each master dictionary
-        if key < get_time.LM(week): #if older than last monday (0 is 1, 1 is 2,2 mondays ago)
+        if key < get_time.FOM(week):
             del week_dict[week][key]
     for key in list(week_dict[week]):
-       if key > get_time.LS(week-1): #if newer than last sunday (0 is 1)
+       if key > get_time.LOM(week):
            del week_dict[week][key]
 
 #Mileage
@@ -131,6 +136,10 @@ for month in count_dict:
     x6_list.append(month)
     y6_list.append(count_dict[month])
 
+for month in week_dict:
+    print(month)
+    for event in week_dict[month]:
+        print(event)
 
 ########
 fig, (ax1,ax2,ax4,ax5) = plt.subplots(nrows=4, figsize=(13,8)) #figsize sets window

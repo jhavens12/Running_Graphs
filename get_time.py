@@ -12,7 +12,7 @@ def now():
 def forever():
     return datetime.datetime(year=2016, month=1, day=1)
 
-def FOM(x): #updated
+def FOM(x): #updated #0 is this month?
     #first of month
     #start of day
     now = datetime.datetime.now()
