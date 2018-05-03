@@ -11,6 +11,7 @@ import pandas as pd
 from random import randint
 from sklearn.linear_model import LinearRegression
 from time import mktime
+import matplotlib.dates as mdates
 
 master_dict = get_data.my_filtered_activities()
 #Setup
@@ -135,6 +136,9 @@ for month in count_dict:
 ########
 fig, (ax1,ax2,ax4,ax5) = plt.subplots(nrows=4, figsize=(13,8)) #figsize sets window
 
+myFmt = mdates.DateFormatter('%m/%d')
+
+
 
 ax1df = trend_line(x_list, y_list)
 ax1.bar(x_list, y_list, align='center', width=6)
@@ -142,6 +146,11 @@ ax1slope = format_number(float(ax1df['y_trend'].iloc[0]) - float(ax1df['y_trend'
 ax1.plot_date(ax1df.dates, ax1df.y_trend, 'red', ls='--', marker='None',label=ax1slope)
 ax1.set_ylabel('Miles Ran', color='b')
 ax1.set_yticks(range(int(max(y_list))+1),3)
+
+ax1.set_xticks(x_list)
+ax1.xaxis.set_major_formatter(myFmt)
+#ax1.xticks(rotation=25)
+
 ax1.tick_params('y', colors='b')
 ax1.yaxis.grid(True)
 ax1.legend()
@@ -150,6 +159,8 @@ ax2.plot(x2_list,y2_list, color='g', label='Pace', linewidth=2)
 ax2.set_ylabel('Pace (Decimal)', color='g')
 ax2.tick_params('y', colors='g')
 ax2.yaxis.grid(True)
+ax2.set_xticks(x2_list)
+ax2.xaxis.set_major_formatter(myFmt)
 ax3 = ax2.twinx()
 ax3.plot(x3_list,y3_list, color='r', label='Avg HR')
 ax3.set_ylabel('Avg of Avg HR', color='r')
@@ -159,6 +170,8 @@ ax4.bar(x6_list,y6_list, align='center', width=6, color='b', label='Outdoor') #t
 ax4.bar(x5_list,y5_list, align='center', width=6, color='#fc5e02', label='Treadmill') #treadmill runs
 ax4.set_ylabel('Runs Per Week', color='b')
 ax4.set_yticks(range(max(y6_list)+1))
+ax4.set_xticks(x5_list)
+ax4.xaxis.set_major_formatter(myFmt)
 ax4.tick_params('y', colors='b')
 ax4.yaxis.grid(True)
 ax4.legend()
@@ -166,8 +179,15 @@ ax4.legend()
 ax5.plot(x4_list,y4_list, label='Total')
 ax5.set_ylabel('Total Elevation (Feet)')
 #ax5.set_yticks(range(int(max(y4_list)+1)),20)
+ax5.set_xticks(x4_list)
+ax5.xaxis.set_major_formatter(myFmt)
 ax5.yaxis.grid(True)
 ax4.legend()
+
+plt.setp(ax1.get_xticklabels(), rotation=10, horizontalalignment='right')
+plt.setp(ax2.get_xticklabels(), rotation=10, horizontalalignment='right')
+plt.setp(ax4.get_xticklabels(), rotation=10, horizontalalignment='right')
+plt.setp(ax5.get_xticklabels(), rotation=10, horizontalalignment='right')
 
 fig.tight_layout()
 fig.subplots_adjust(hspace=0.3)
