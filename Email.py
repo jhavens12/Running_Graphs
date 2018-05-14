@@ -1,3 +1,6 @@
+import matplotlib
+matplotlib.use('Agg')
+
 import get_time
 import get_data
 import calc
@@ -15,8 +18,6 @@ import yagmail
 import io
 import credentials
 #####
-import matplotlib
-matplotlib.use('Agg')
 
 global mass_figsize
 mass_figsize=(15,10)
@@ -419,7 +420,7 @@ def yearly_compare():
     graph('x*(600/365)', range(0,366),"600 Miles",ax2,'r')
     ax2.plot(extended_range, predicted, label=label2, linestyle='--', linewidth = year_linewidth)
     ax2.plot(extended_range_30, predicted_30, label=label1, linestyle='--', linewidth = year_linewidth)
-    ax2.plot(list(yearly_dict.keys()),list(yearly_dict.values()),label=('This Year'),color='green',lw='1', linewidth = year_linewidth)
+    ax2.plot(list(yearly_dict.keys()),list(yearly_dict.values()),label=('This Year'),color='green', linewidth = year_linewidth)
     ax2.legend()
 
     fig.tight_layout()
