@@ -15,6 +15,8 @@ import yagmail
 import io
 import credentials
 #####
+import matplotlib
+matplotlib.use('Agg')
 
 global mass_figsize
 mass_figsize=(15,10)
