@@ -39,7 +39,7 @@ def append_image(graph_name,plt):
 
 def send_mail():
     timestamp = str(datetime.datetime.now())
-    yag.send('jhavens12@gmail.com', 'Running Graphs', contents=[timestamp,graph_list])
+    yag.send('jhavens12@gmail.com', 'Running Graphs', contents=[graph_list])
 
 def format_number(number):
     return str("{0:.2f}".format(number))
