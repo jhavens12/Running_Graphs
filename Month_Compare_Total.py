@@ -8,6 +8,8 @@ from pprint import pprint
 
 master_dict = get_data.my_filtered_activities() #grabs dictionary of strava information
 
+pprint(master_dict)
+
 def graph_per_month_total(master_dict,choice_dict,unit_dict):
     input2 = 'distance_miles'
 

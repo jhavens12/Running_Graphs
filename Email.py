@@ -35,7 +35,8 @@ def append_image(graph_name,plt):
     graph_list.append(name)
 
 def send_mail():
-    yag.send('jhavens12@gmail.com', 'Running Graphs', contents=graph_list)
+    timestamp = str(datetime.datetime.now())
+    yag.send('jhavens12@gmail.com', 'Running Graphs', contents=[timestamp,graph_list])
 
 def format_number(number):
     return str("{0:.2f}".format(number))
@@ -352,6 +353,8 @@ def monthly_compare():
     append_image("Monthly_Compare",plt)
 
 def yearly_compare():
+    year_linewidth = 3
+    linewidth = year_linewidth
     single_dict = {}
 
     for event in master_dict:
@@ -367,13 +370,13 @@ def yearly_compare():
 
     fig, (ax1,ax2) = plt.subplots(nrows=2, figsize=mass_figsize)
 
-    ax1.plot(list(yearly_dict.keys()),list(yearly_dict.values()),label=('This Year'),color='green')
-    ax1.plot(list(yearly_dict2.keys()),list(yearly_dict2.values()),label=('Last Year'))
+    ax1.plot(list(yearly_dict.keys()),list(yearly_dict.values()),label=('This Year'),color='green', linewidth = year_linewidth)
+    ax1.plot(list(yearly_dict2.keys()),list(yearly_dict2.values()),label=('Last Year'), linewidth = year_linewidth)
 
     def graph(formula, x_range,title,plot_number,color):
         x = np.array(x_range)
         y = eval(formula)
-        plot_number.plot(x, y, color, label=title, linestyle=':')
+        plot_number.plot(x, y, color, label=title, linestyle=':', linewidth = year_linewidth)
 
     def format_number(number):
         return str("{0:.2f}".format(number))
@@ -412,9 +415,9 @@ def yearly_compare():
     label2 = "2018: "+format_number(predicted[-1])
 
     graph('x*(600/365)', range(0,366),"600 Miles",ax2,'r')
-    ax2.plot(extended_range, predicted, label=label2, linestyle='--')
-    ax2.plot(extended_range_30, predicted_30, label=label1, linestyle='--')
-    ax2.plot(list(yearly_dict.keys()),list(yearly_dict.values()),label=('This Year'),color='green',lw='1')
+    ax2.plot(extended_range, predicted, label=label2, linestyle='--', linewidth = year_linewidth)
+    ax2.plot(extended_range_30, predicted_30, label=label1, linestyle='--', linewidth = year_linewidth)
+    ax2.plot(list(yearly_dict.keys()),list(yearly_dict.values()),label=('This Year'),color='green',lw='1', linewidth = year_linewidth)
     ax2.legend()
 
     fig.tight_layout()
