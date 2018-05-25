@@ -157,7 +157,7 @@ def weekly_compare():
     for month in count_dict:
         x6_list.append(month)
         y6_list.append(count_dict[month])
-        
+
     x7_list = []
     y7_list = []
     for month in partner_dict:
@@ -219,7 +219,7 @@ def weekly_compare():
     ax4.xaxis.set_major_formatter(myFmt)
     ax4.tick_params('y', colors='b')
     ax4.yaxis.grid(True)
-    ax4.legend()
+    ax4.legend() #this causes issues on linux system
 
     #elevation
     ax5.plot(x4_list,y4_list, label='Total: '+format_number(sum(y4_list)))
