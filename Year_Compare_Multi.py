@@ -77,6 +77,20 @@ def extended_prediction(x_list,y_list,end_day):
 extended_range, predicted = extended_prediction(x_list, y_list, 365)
 extended_range_30, predicted_30 = extended_prediction(x2_list, y2_list, 365)
 
+######
+the_list = []
+for x,y in zip(extended_range_30,predicted_30):
+    if y > 600:
+        the_list.append(x)
+print()
+goal_day = the_list[0]
+#day_of_year = datetime.now().timetuple().tm_yday
+timestamp = datetime.datetime.now()
+goal_day_nice = datetime.datetime(timestamp.year, 1, 1) + datetime.timedelta(goal_day - 1)
+print(str(goal_day_nice)+" is the day we will hit 600 miles based on the past 30 days")
+
+####
+
 label1 = "30 Days: "+format_number(predicted_30[-1])
 label2 = "2018: "+format_number(predicted[-1])
 

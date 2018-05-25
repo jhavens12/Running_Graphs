@@ -72,23 +72,23 @@ for week in week_dict:
             if 'total_elevation_feet' in week_dict[week][activity]:
                 ele_list.append(float(week_dict[week][activity]['total_elevation_feet']))
                 ele_dict[get_time.FOM(week)] = sum(ele_list)#/len(ele_list)
-            else:
-                ele_dict[get_time.FOM(week)] = 0
+            # else:
+            #     ele_dict[get_time.FOM(week)] = 0
             if 'treadmill_flagged' in week_dict[week][activity]:
                 if week_dict[week][activity]['treadmill_flagged'] == 'yes':
                     tred_list.append(1)
-            else:
-                tred_list.append(0)
+            # else:
+            #     tred_list.append(0)
         hr_dict[get_time.FOM(week)] = sum(hr_list)/len(hr_list)
         miles_dict[get_time.FOM(week)] = sum(mile_list)
         pace_dict[get_time.FOM(week)] = sum(pace_list)/len(pace_list)
         tred_dict[get_time.FOM(week)] = sum(tred_list)
         count_dict[get_time.FOM(week)] = sum(count_list)
-    else:
-        miles_dict[get_time.FOM(week)] = 0
-        pace_dict[get_time.FOM(week)] = 0
-        hr_dict[get_time.FOM(week)] = 0
-        count_dict[get_time.FOM(week)] = 0
+    # else:
+    #     miles_dict[get_time.FOM(week)] = 0
+    #     pace_dict[get_time.FOM(week)] = 0
+    #     hr_dict[get_time.FOM(week)] = 0
+    #     count_dict[get_time.FOM(week)] = 0
 
 x_list = []
 y_list = []
@@ -141,6 +141,9 @@ ax1.tick_params('y', colors='b')
 ax1.yaxis.grid(True)
 ax1.legend()
 ax1.set_xticks(x_list)
+labels = ax1.set_xticklabels(x_list)
+for i, label in enumerate(labels):
+    label.set_y(label.get_position()[1] - (i % 2) * 0.09)
 ax1.xaxis.set_major_formatter(myFmt)
 
 ax2.plot(x2_list,y2_list, color='g', label='Pace', linewidth=2)
@@ -152,6 +155,9 @@ ax3.plot(x3_list,y3_list, color='r', label='Avg HR')
 ax3.set_ylabel('Avg of Avg HR', color='r')
 ax3.tick_params('y', colors='r')
 ax2.set_xticks(x2_list)
+labels = ax2.set_xticklabels(x2_list)
+for i, label in enumerate(labels):
+    label.set_y(label.get_position()[1] - (i % 2) * 0.09)
 ax2.xaxis.set_major_formatter(myFmt)
 
 ax4.bar(x6_list,y6_list, align='center', width=25, color='b', label='Outdoor') #total runs
@@ -162,6 +168,9 @@ ax4.tick_params('y', colors='b')
 ax4.yaxis.grid(True)
 ax4.legend()
 ax4.set_xticks(x5_list)
+labels = ax4.set_xticklabels(x6_list)
+for i, label in enumerate(labels):
+    label.set_y(label.get_position()[1] - (i % 2) * 0.09)
 ax4.xaxis.set_major_formatter(myFmt)
 
 ax5.plot(x4_list,y4_list, label='Total')
@@ -170,7 +179,15 @@ ax5.set_ylabel('Total Elevation (Feet)')
 ax5.yaxis.grid(True)
 ax5.legend()
 ax5.set_xticks(x4_list)
+labels = ax5.set_xticklabels(x4_list)
+for i, label in enumerate(labels):
+    label.set_y(label.get_position()[1] - (i % 2) * 0.09)
 ax5.xaxis.set_major_formatter(myFmt)
+
+plt.setp(ax1.get_xticklabels(), rotation=0, horizontalalignment='center')
+plt.setp(ax2.get_xticklabels(), rotation=0, horizontalalignment='center')
+plt.setp(ax4.get_xticklabels(), rotation=0, horizontalalignment='center')
+plt.setp(ax5.get_xticklabels(), rotation=0, horizontalalignment='center')
 
 fig.tight_layout()
 fig.subplots_adjust(hspace=0.3)
