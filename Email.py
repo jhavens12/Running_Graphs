@@ -81,6 +81,7 @@ def weekly_compare():
     ele_dict = {}
     tred_dict = {}
     count_dict = {}
+    partner_dict = {}
 
     for week in week_dict:
         if week_dict[week]: #check to see if any activites exist in the given week
@@ -90,6 +91,7 @@ def weekly_compare():
             ele_list = []
             tred_list = []
             count_list = []
+            partner_list = []
             for activity in week_dict[week]:
                 count_list.append(1)
                 mile_list.append(float(week_dict[week][activity]['distance_miles']))
@@ -104,6 +106,9 @@ def weekly_compare():
                 if 'treadmill_flagged' in week_dict[week][activity]:
                     if week_dict[week][activity]['treadmill_flagged'] == 'yes':
                         tred_list.append(1)
+                if 'athlete_count' in week_dict[week][activity]:
+                    if week_dict[week][activity]['athlete_count'] > 1:
+                        partner_list.append(1)
                 # else:
                 #     tred_list.append(0)
             hr_dict[get_time.LM(week)] = sum(hr_list)/len(hr_list)
@@ -152,6 +157,12 @@ def weekly_compare():
     for month in count_dict:
         x6_list.append(month)
         y6_list.append(count_dict[month])
+        
+    x7_list = []
+    y7_list = []
+    for month in partner_dict:
+        x7_list.append(month)
+        y7_list.append(partner_dict[month])
 
     ########
     fig, (ax1,ax2,ax4,ax5) = plt.subplots(nrows=4, figsize=(13,8)) #figsize sets window
