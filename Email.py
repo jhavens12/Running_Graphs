@@ -38,8 +38,10 @@ def append_image(graph_name,plt):
     graph_list.append(name)
 
 def send_mail():
-    timestamp = str(datetime.datetime.now())
-    yag.send('jhavens12@gmail.com', 'Running Graphs', contents=graph_list)
+    d_date = datetime.datetime.now()
+    reg_format_date = str(d_date.strftime("%Y-%m-%d %I:%M:%S %p"))
+    title = "Running Graphs: "+reg_format_date
+    yag.send('jhavens12@gmail.com', title, contents=graph_list)
 
 def format_number(number):
     return str("{0:.2f}".format(number))
