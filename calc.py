@@ -81,6 +81,7 @@ def yearly_totals(dictionary,years_ago):
     #0 = this year
     #1 = last year
     #returns days of year as keys (1-365)
+
     now = datetime.datetime.now()
     start_of_year = datetime.datetime((now.year - years_ago), 1, 1)
     end_of_year = datetime.datetime((now.year - years_ago), 12, 31)

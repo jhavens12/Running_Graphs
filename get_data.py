@@ -1,4 +1,4 @@
-#v2.0
+#v3 06/08/18 - SUPPORT FOR PAGINATION
 import requests
 import time
 import datetime
@@ -14,18 +14,27 @@ def my_filtered_activities(): #combines my_activities and filter functions
     header = {'Authorization': 'Bearer '+credentials.api_key}
     param = {'per_page':200, 'page':1}
     dataset = requests.get(url, headers=header, params=param).json()
-    return {event_timestamp(i): clean_event(i) for i in dataset if wanted_event(i)}
+    count = len(dataset)
+    if count == 200: #if 200 results come back
+        loop_count = 1 #we've already done one loop
+        while count == 200: #while it keeps returning 200 results
+            loop_count = loop_count + 1 #increase loop_count or page number
+            param = {'per_page':200, 'page':loop_count} #reset params
+            sub_dataset = requests.get(url, headers=header, params=param).json() #pull new data with sub_dataset name
+            dataset = dataset + sub_dataset #combine (Json files, not dictionaries thank jesus)
+            count = len(sub_dataset) #count results to see if we need to loop again
+    return {event_timestamp(i): clean_event(i) for i in dataset if wanted_event(i)} #return as normal
 
 def my_activities():
     url = 'https://www.strava.com/api/v3/athlete/activities'
-    header = {'Authorization': 'Bearer 20e053894a514fbd2b42e2601d33976f6bccebea'}
+    header = {'Authorization': 'Bearer '+credentials.api_key}
     param = {'per_page':200, 'page':1}
     my_dataset = requests.get(url, headers=header, params=param).json()
     return my_dataset
 
 def activities():
     url = 'https://www.strava.com/api/v3/activities/following'
-    header = {'Authorization': 'Bearer 20e053894a514fbd2b42e2601d33976f6bccebea'}
+    header = {'Authorization': 'Bearer '+credentials.api_key}
     param = {'per_page':200, 'page':1}
     dataset = requests.get(url, headers=header, params=param).json()
     return dataset
@@ -39,16 +48,24 @@ def event_timestamp(i):
 def convert_weekday(i):
     return str(calendar.day_name[i.weekday()])+" "+str(i.day)
 
+def convert_weekday_full(i):
+    return str(calendar.day_name[i.weekday()])+" "+str(calendar.month_name[i.month])+" "+str(i.day)
+
+def convert_weekday_short(i):
+    return str(calendar.day_abbr[i.weekday()])+" "+str(calendar.month_abbr[i.month])+" "+str(i.day)
+
 def clean_event(i):
     if not i['has_heartrate']:
         i['average_heartrate'] = i['max_heartrate'] = 0
     i['elapsed'] = convert_seconds_to_minutes(i['elapsed_time'])
-    i['pace_dec'] = convert_pace(i['distance'],i['elapsed_time'])
-    i['pace'] = convert_dec_time(convert_pace(i['distance'],i['elapsed_time']))
+    i['pace_dec'] = convert_pace(i['distance'],i['moving_time'])
+    i['pace'] = convert_dec_time(convert_pace(i['distance'],i['moving_time']))
     i['distance_miles'] = convert_meters_to_miles(i['distance'])
     i['total_elevation_feet'] = convert_elevation(i['total_elevation_gain'])
     i['start_date_datetime'] = event_timestamp(i)
     i['weekday_date'] = convert_weekday(i['start_date_datetime'])
+    i['weekday_full_date'] = convert_weekday_full(i['start_date_datetime'])
+    i['weekday_short_date'] = convert_weekday_short(i['start_date_datetime'])
     if "Treadmill" not in i['name']:
         i['treadmill_flagged'] = "no"
     if "Treadmill" in i['name']:

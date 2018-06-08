@@ -29,9 +29,11 @@ print(len(single_yearly_dict))
 
 print("last year:")
 print(len(single_yearly_dict_2))
+####********
 
 yearly_dict = calc.yearly_totals(master_dict.copy(),0) #current year
 yearly_dict2 = calc.yearly_totals(master_dict.copy(),1) #last year
+#pprint(yearly_dict2)
 
 fig, (ax1,ax2) = plt.subplots(nrows=2, figsize=(13,8))
 
