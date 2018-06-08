@@ -221,7 +221,7 @@ def weekly_compare():
     ax4.xaxis.set_major_formatter(myFmt)
     ax4.tick_params('y', colors='b')
     ax4.yaxis.grid(True)
-    ax4.legend() #this causes issues on linux system
+    ax4.legend() #COMMENT THIS LINE OUT this causes issues on linux system
 
     #elevation
     ax5.plot(x4_list,y4_list, label='Total: '+format_number(sum(y4_list)))
