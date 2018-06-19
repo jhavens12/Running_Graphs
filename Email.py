@@ -26,6 +26,7 @@ mass_figsize=(15,10)
 gmail_user = credentials.gmail_user
 gmail_password = credentials.gmail_password
 yag = yagmail.SMTP( gmail_user, gmail_password)
+temp_folder = credentials.temp_folder
 
 global graph_list
 graph_list = []
@@ -33,7 +34,7 @@ graph_list = []
 master_dict = get_data.my_filtered_activities()
 
 def append_image(graph_name,plt):
-    name = './temp/'+graph_name+'.png' #this needs to change if run by cron
+    name = temp_folder+graph_name+'.png' #this needs to change if run by cron
     plt.savefig(name)
     graph_list.append(name)
 
