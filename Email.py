@@ -41,7 +41,7 @@ def send_mail():
     d_date = datetime.datetime.now()
     reg_format_date = str(d_date.strftime("%Y-%m-%d %I:%M:%S %p"))
     title = "Running Graphs: "+reg_format_date
-    yag.send('jhavens12@gmail.com', title, contents=graph_list)
+    yag.send('jhavens12@gmail.com', title, contents=title, attachments=graph_list)
 
 def format_number(number):
     return str("{0:.2f}".format(number))
