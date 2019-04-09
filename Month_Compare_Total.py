@@ -8,8 +8,6 @@ from pprint import pprint
 
 master_dict = get_data.my_filtered_activities() #grabs dictionary of strava information
 
-pprint(master_dict)
-
 def graph_per_month_total(master_dict,choice_dict,unit_dict):
     input2 = 'distance_miles'
 
@@ -57,7 +55,7 @@ def graph_per_month_running(master_dict,choice_dict,unit_dict,days_total):
 unit_dict = {1:'distance_miles', 2:'elapsed_time', 3:'average_speed', 4:'kudos_count', 5:'max_heartrate', 6:'average_heartrate', 7:'max_speed', 8:'pace_dec', 9:'total_elevation_gain', \
     10:'athlete_count', 11:'average_temp', 12:'achivement_count'}
 
-list1 = list(range(0,15)) #past 15 months
+list1 = list(range(0,30)) #past 15 months
 list2 = []
 for x in list1:
     list2.append(str(get_time.what_month(get_time.FOM(x).month)) +" "+str(get_time.FOM(x).year)) #generates month and years
