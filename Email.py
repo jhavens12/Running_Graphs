@@ -415,7 +415,8 @@ def monthly_compare():
     append_image("Monthly_Compare",plt)
 
 def yearly_compare():
-    year_linewidth = 1
+    year_linewidth = 2
+    goal_linewdith = 1
     linewidth = year_linewidth
     single_dict = {}
 
@@ -442,14 +443,14 @@ def yearly_compare():
 
     fig, (ax1,ax2) = plt.subplots(nrows=2, figsize=mass_figsize)
 
-    ax1.plot(list(yearly_dict.keys()),list(yearly_dict.values()),label=label1, color='red', linewidth = year_linewidth)
+    ax1.plot(list(yearly_dict.keys()),list(yearly_dict.values()), label=label1, color='red', linewidth = year_linewidth)
     ax1.plot(list(yearly_dict2.keys()),list(yearly_dict2.values()),label=label2, color='blue', linewidth = year_linewidth)
     ax1.plot(list(yearly_dict3.keys()),list(yearly_dict3.values()),label=label3, color='green', linewidth = year_linewidth)
 
     def graph(formula, x_range,title,plot_number,color):
         x = np.array(x_range)
         y = eval(formula)
-        plot_number.plot(x, y, color, label=title, linestyle=':', linewidth = year_linewidth)
+        plot_number.plot(x, y, color, label=title, linestyle=':', linewidth = goal_linewidth)
 
     def format_number(number):
         return str("{0:.2f}".format(number))
@@ -488,13 +489,13 @@ def yearly_compare():
     label1 = "30 Days: "+format_number(predicted_30[-1])
     label2 = "This Year: "+format_number(predicted[-1])
 
-    graph('x*(600/365)', range(0,366),"600",ax1,'y')
-    graph('x*(650/365)', range(0,366),"650",ax1,'k')
+    graph('x*(600/365)', range(0,366),"600",ax2,'y')
+    graph('x*(650/365)', range(0,366),"650",ax2,'k')
 
-    ax2.plot(extended_range, predicted, label=label2, linestyle='--', linewidth = year_linewidth, color='blue')
-    ax2.plot(extended_range_30, predicted_30, label=label1, linestyle='--', linewidth = year_linewidth, color='orange')
+    ax2.plot(extended_range, predicted, label=label2, linestyle='--', color='blue', linewidth = goal_linewidth)
+    ax2.plot(extended_range_30, predicted_30, label=label1, linestyle='--', color='orange', linewidth = goal_linewidth)
     ax2.plot(list(yearly_dict.keys()),list(yearly_dict.values()),label=('This Year'), color='red', linewidth = year_linewidth)
-    ax1.set_title('Predictions')
+    ax2.set_title('Predictions')
     ax2.legend()
 
     fig.tight_layout()
