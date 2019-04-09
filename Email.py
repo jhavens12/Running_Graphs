@@ -98,7 +98,8 @@ def weekly_compare():
                 count_list.append(1)
                 mile_list.append(float(week_dict[week][activity]['distance_miles']))
                 pace_list.append(float(week_dict[week][activity]['pace_dec']))
-                hr_list.append(float(week_dict[week][activity]['average_heartrate']))
+                if float(week_dict[week][activity]['average_heartrate']) != 0:
+                    hr_list.append(float(week_dict[week][activity]['average_heartrate']))
                 #print(week_dict[week][activity]['average_heartrate'])
                 if 'total_elevation_feet' in week_dict[week][activity]:
                     ele_list.append(float(week_dict[week][activity]['total_elevation_feet']))
@@ -171,6 +172,7 @@ def weekly_compare():
 
     myFmt = mdates.DateFormatter('%m/%d')
 
+    # Miles Ran
     ax1df = trend_line(x_list, y_list)
     ax1.bar(x_list, y_list, align='center', width=6, label="Total: "+format_number(sum(y_list)))
     ax1slope = format_number(float(ax1df['y_trend'].iloc[0]) - float(ax1df['y_trend'].iloc[-1]))
@@ -190,7 +192,7 @@ def weekly_compare():
 
     ax1.xaxis.set_major_formatter(myFmt)
 
-    ####
+    # Pace vs HR
     ax2.plot(x2_list,y2_list, color='g', linewidth=2, label='Pace: '+format_number(sum(y2_list)/len(y2_list)))
     ax2.set_ylabel('Pace (Decimal)', color='g')
     ax2.tick_params('y', colors='g')
@@ -443,9 +445,9 @@ def yearly_compare():
 
     fig, (ax1,ax2) = plt.subplots(nrows=2, figsize=mass_figsize)
 
-    ax1.plot(list(yearly_dict.keys()),list(yearly_dict.values()), label=label1, color='red', linewidth = year_linewidth)
-    ax1.plot(list(yearly_dict2.keys()),list(yearly_dict2.values()),label=label2, color='blue', linewidth = year_linewidth)
     ax1.plot(list(yearly_dict3.keys()),list(yearly_dict3.values()),label=label3, color='green', linewidth = year_linewidth)
+    ax1.plot(list(yearly_dict2.keys()),list(yearly_dict2.values()),label=label2, color='blue', linewidth = year_linewidth)
+    ax1.plot(list(yearly_dict.keys()),list(yearly_dict.values()), label=label1, color='red', linewidth = year_linewidth)
 
     def graph(formula, x_range,title,plot_number,color):
         x = np.array(x_range)
