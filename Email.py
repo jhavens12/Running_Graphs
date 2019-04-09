@@ -85,7 +85,7 @@ def weekly_compare():
     count_dict = {}
     partner_dict = {}
 
-    for week in week_dict:
+    for week in week_dict: #this creates the lists of y values for the below graphs
         if week_dict[week]: #check to see if any activites exist in the given week
             mile_list = []
             pace_list = []
@@ -98,7 +98,7 @@ def weekly_compare():
                 count_list.append(1)
                 mile_list.append(float(week_dict[week][activity]['distance_miles']))
                 pace_list.append(float(week_dict[week][activity]['pace_dec']))
-                if float(week_dict[week][activity]['average_heartrate']) != 0:
+                if float(week_dict[week][activity]['average_heartrate']) != 0: #don't cound the 0's in runs i manually enter
                     hr_list.append(float(week_dict[week][activity]['average_heartrate']))
                 #print(week_dict[week][activity]['average_heartrate'])
                 if 'total_elevation_feet' in week_dict[week][activity]:
@@ -180,17 +180,17 @@ def weekly_compare():
     ax1.set_ylabel('Miles Ran', color='b')
     ax1.set_yticks(range(int(max(y_list))+1),3)
 
-    ax1.set_xticks(x_list)
+    #ax1.set_xticks(x_list)
 
     ax1.tick_params('y', colors='b')
     ax1.yaxis.grid(True)
     ax1.legend()
 
     labels = ax1.set_xticklabels(x_list)
-    for i, label in enumerate(labels):
-        label.set_y(label.get_position()[1] - (i % 2) * 0.09)
+    #for i, label in enumerate(labels):
+        #label.set_y(label.get_position()[1] - (i % 2) * 0.09)
 
-    ax1.xaxis.set_major_formatter(myFmt)
+    #ax1.xaxis.set_major_formatter(myFmt)
 
     # Pace vs HR
     ax2.plot(x2_list,y2_list, color='g', linewidth=2, label='Pace: '+format_number(sum(y2_list)/len(y2_list)))
@@ -289,7 +289,8 @@ def monthly_compare():
                 count_list.append(1)
                 mile_list.append(float(week_dict[week][activity]['distance_miles']))
                 pace_list.append(float(week_dict[week][activity]['pace_dec']))
-                hr_list.append(float(week_dict[week][activity]['average_heartrate']))
+                if float(week_dict[week][activity]['average_heartrate']) != 0: #don't cound the 0's in runs i manually enter
+                    hr_list.append(float(week_dict[week][activity]['average_heartrate']))
                 #print(week_dict[week][activity]['average_heartrate'])
                 if 'total_elevation_feet' in week_dict[week][activity]:
                     ele_list.append(float(week_dict[week][activity]['total_elevation_feet']))
