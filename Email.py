@@ -180,17 +180,20 @@ def weekly_compare():
     ax1.set_ylabel('Miles Ran', color='b')
     ax1.set_yticks(range(int(max(y_list))+1),3)
 
-    #ax1.set_xticks(x_list)
+    ax1.set_xticks(x_list)
 
     ax1.tick_params('y', colors='b')
     ax1.yaxis.grid(True)
     ax1.legend()
 
     labels = ax1.set_xticklabels(x_list)
-    #for i, label in enumerate(labels):
-        #label.set_y(label.get_position()[1] - (i % 2) * 0.09)
+    for i, label in enumerate(labels):
+        #if (i % 3) == 1: label.set_label(" ")
+        #if (i % 3) == 2: label.set_label(" ")
+        #label.set_label(" ")
+        label.set_y(label.get_position()[1] - (i % 3) * 0.9) #this offsets every other (or 3rd) label by .9 vertically, essentially removing
 
-    #ax1.xaxis.set_major_formatter(myFmt)
+    ax1.xaxis.set_major_formatter(myFmt)
 
     # Pace vs HR
     ax2.plot(x2_list,y2_list, color='g', linewidth=2, label='Pace: '+format_number(sum(y2_list)/len(y2_list)))
@@ -219,7 +222,7 @@ def weekly_compare():
     ax4.set_xticks(x5_list)
     labels = ax4.set_xticklabels(x5_list)
     for i, label in enumerate(labels):
-        label.set_y(label.get_position()[1] - (i % 2) * 0.09)
+        label.set_y(label.get_position()[1] - (i % 3) * 0.09)
     ax4.xaxis.set_major_formatter(myFmt)
     ax4.tick_params('y', colors='b')
     ax4.yaxis.grid(True)
@@ -232,7 +235,7 @@ def weekly_compare():
     ax5.set_xticks(x4_list)
     labels = ax5.set_xticklabels(x4_list)
     for i, label in enumerate(labels):
-        label.set_y(label.get_position()[1] - (i % 2) * 0.09)
+        label.set_y(label.get_position()[1] - (i % 3) * 0.09)
     ax5.xaxis.set_major_formatter(myFmt)
     ax5.yaxis.grid(True)
     ax5.legend()
