@@ -416,7 +416,7 @@ def monthly_compare():
 
 def yearly_compare():
     year_linewidth = 2
-    goal_linewdith = 1
+    goal_linewidth = 1
     linewidth = year_linewidth
     single_dict = {}
 
