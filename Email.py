@@ -59,7 +59,7 @@ def trend_line(x_list,y_list):
 
 def weekly_compare():
 
-    diff = datetime.datetime.now() - datetime.datetime(2018, 1, 1)
+    diff = datetime.datetime.now() - datetime.datetime(2018, 1, 1) #when to start the graph
 
     weeks_back = int(diff.days/7)
     weeks_to_calculate = list(range(0,weeks_back)) #calculate 0 to 17
@@ -69,7 +69,6 @@ def weekly_compare():
         week_dict[week] = master_dict.copy() #make a master dict for each week to calculate
 
     for week in week_dict:
-
         for key in list(week_dict[week]): #for each key in each master dictionary
             if key < get_time.LM(week): #if older than last monday (0 is 1, 1 is 2,2 mondays ago)
                 del week_dict[week][key]
@@ -416,25 +415,36 @@ def monthly_compare():
     append_image("Monthly_Compare",plt)
 
 def yearly_compare():
-    year_linewidth = 3
+    year_linewidth = 1
     linewidth = year_linewidth
     single_dict = {}
 
-    for event in master_dict:
-        if master_dict[event]['athlete_count'] == 1:
-            if master_dict[event]['treadmill_flagged'] == 'no':
-                single_dict[event] = master_dict[event]
+    # 2017 - green
+    # 2018 - blue
+    # 2019 - red
+    # goal - white
 
-    single_yearly_dict = calc.yearly_totals(single_dict.copy(),0) #this year
-    single_yearly_dict_2 = calc.yearly_totals(single_dict.copy(),1) #last year
+    # for event in master_dict:
+    #     if master_dict[event]['athlete_count'] == 1:
+    #         if master_dict[event]['treadmill_flagged'] == 'no':
+    #             single_dict[event] = master_dict[event]
+    #
+    # single_yearly_dict = calc.yearly_totals(single_dict.copy(),0) #this year
+    # single_yearly_dict_2 = calc.yearly_totals(single_dict.copy(),1) #last year
+
+    label1=int(datetime.datetime.now().year)
+    label2=label1-1
+    label3=label1-2
 
     yearly_dict = calc.yearly_totals(master_dict.copy(),0) #current year
     yearly_dict2 = calc.yearly_totals(master_dict.copy(),1) #last year
+    yearly_dict3 = calc.yearly_totals(master_dict.copy(),2) #two years ago
 
     fig, (ax1,ax2) = plt.subplots(nrows=2, figsize=mass_figsize)
 
-    ax1.plot(list(yearly_dict.keys()),list(yearly_dict.values()),label=('This Year'),color='green', linewidth = year_linewidth)
-    ax1.plot(list(yearly_dict2.keys()),list(yearly_dict2.values()),label=('Last Year'), linewidth = year_linewidth)
+    ax1.plot(list(yearly_dict.keys()),list(yearly_dict.values()),label=label1, color='red', linewidth = year_linewidth)
+    ax1.plot(list(yearly_dict2.keys()),list(yearly_dict2.values()),label=label2, color='blue', linewidth = year_linewidth)
+    ax1.plot(list(yearly_dict3.keys()),list(yearly_dict3.values()),label=label3, color='green', linewidth = year_linewidth)
 
     def graph(formula, x_range,title,plot_number,color):
         x = np.array(x_range)
@@ -444,11 +454,12 @@ def yearly_compare():
     def format_number(number):
         return str("{0:.2f}".format(number))
 
-    graph('x*(600/365)', range(0,366),"600 Miles",ax1,'r')
-    graph('x*(365/365)', range(0,366),"365 Miles",ax1,'b')
+    graph('x*(600/365)', range(0,366),"600",ax1,'y')
+    graph('x*(650/365)', range(0,366),"650",ax1,'k')
     ax1.set_title('Yearly Totals')
     ax1.legend()
 
+    ########################################################
     #ax2 setup
     x_list = []
     y_list = []
@@ -475,12 +486,15 @@ def yearly_compare():
     extended_range_30, predicted_30 = extended_prediction(x2_list, y2_list, 365)
 
     label1 = "30 Days: "+format_number(predicted_30[-1])
-    label2 = "2018: "+format_number(predicted[-1])
+    label2 = "This Year: "+format_number(predicted[-1])
 
-    graph('x*(600/365)', range(0,366),"600 Miles",ax2,'r')
-    ax2.plot(extended_range, predicted, label=label2, linestyle='--', linewidth = year_linewidth)
-    ax2.plot(extended_range_30, predicted_30, label=label1, linestyle='--', linewidth = year_linewidth)
-    ax2.plot(list(yearly_dict.keys()),list(yearly_dict.values()),label=('This Year'),color='green', linewidth = year_linewidth)
+    graph('x*(600/365)', range(0,366),"600",ax1,'y')
+    graph('x*(650/365)', range(0,366),"650",ax1,'k')
+
+    ax2.plot(extended_range, predicted, label=label2, linestyle='--', linewidth = year_linewidth, color='blue')
+    ax2.plot(extended_range_30, predicted_30, label=label1, linestyle='--', linewidth = year_linewidth, color='orange')
+    ax2.plot(list(yearly_dict.keys()),list(yearly_dict.values()),label=('This Year'), color='red', linewidth = year_linewidth)
+    ax1.set_title('Predictions')
     ax2.legend()
 
     fig.tight_layout()
