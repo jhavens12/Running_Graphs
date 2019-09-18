@@ -157,6 +157,8 @@ for month in partner_dict:
     x7_list.append(month)
     y7_list.append(partner_dict[month])
 
+
+pprint(miles_dict)
 ########
 fig, (ax1,ax2,ax4,ax5) = plt.subplots(nrows=4, figsize=(13,8)) #figsize sets window
 
